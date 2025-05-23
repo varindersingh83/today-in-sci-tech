@@ -1,122 +1,128 @@
-# Today in Science & Tech
+# Today in Sci-Tech
 
-An automated tool that generates engaging Twitter threads about the latest AI research papers from arXiv. The tool fetches recent papers, summarizes them in an accessible way, and creates a formatted thread ready for sharing.
+An automated tool that generates engaging Twitter threads about the latest AI research papers.
 
 ## Features
 
-- Fetches latest AI research papers from arXiv RSS feed
-- Uses GPT-4 to generate accessible summaries of complex research
-- Creates formatted Twitter threads with paper titles, summaries, and links
-- Includes error handling and SMS alerts for monitoring
-- Saves generated threads as markdown files with timestamps
+- Fetches latest AI research papers from arXiv
+- Summarizes papers using OpenAI's GPT models
+- Generates engaging Twitter threads
+- Sends SMS alerts for errors or important updates
+- Modular and extensible architecture
 
 ## Project Structure
 
 ```
 today-in-sci-tech/
-├── data/                  # Data directory
-│   └── threads/          # Generated thread files
-├── src/                  # Source code
+├── src/
 │   └── today_in_sci_tech/
 │       ├── __init__.py
-│       ├── __main__.py   # CLI entry point
-│       ├── alerts.py     # SMS notification system
-│       ├── fetcher.py    # arXiv paper fetching
-│       ├── summarizer.py # GPT-4 summarization
-│       └── thread_generator.py # Main thread generation
-├── tests/                # Test suite
+│       ├── alerts.py        # SMS alert functionality
+│       ├── fetcher.py       # arXiv paper fetching
+│       ├── summarizer.py    # Paper summarization
+│       └── thread_generator.py  # Twitter thread generation
+├── tests/
+│   ├── __init__.py
+│   ├── test_alerts.py
+│   ├── test_fetcher.py
+│   ├── test_integration.py
+│   ├── test_summarizer.py
+│   └── test_thread_generator.py
+├── data/
+│   └── threads/            # Generated thread files
+├── .env.example           # Example environment variables
 ├── .gitignore
-├── README.md
-├── requirements.txt
-└── setup.py
+├── pyproject.toml        # Project metadata and dependencies
+├── pytest.ini           # Pytest configuration
+└── README.md
 ```
 
 ## Setup
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/today-in-sci-tech.git
-   cd today-in-sci-tech
-   ```
+```bash
+git clone https://github.com/yourusername/today-in-sci-tech.git
+cd today-in-sci-tech
+```
 
 2. Create and activate a virtual environment:
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   ```
+```bash
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+```
 
 3. Install the package in development mode:
-   ```bash
-   pip install -e ".[dev]"
-   ```
+```bash
+pip install -e ".[dev]"
+```
 
-4. Create a `.env` file with your API keys:
-   ```
-   OPENAI_API_KEY=your_openai_api_key
-   ALERT_EMAIL=your_email@gmail.com
-   ALERT_EMAIL_PASS=your_app_specific_password
-   ALERT_SMS_GATEWAY=your_phone@carrier_gateway.com
-   ```
+4. Copy `.env.example` to `.env` and fill in your credentials:
+```bash
+cp .env.example .env
+```
 
-   Note: For Gmail, you'll need to use an App Password. For SMS gateway, use your carrier's email-to-SMS gateway address.
+Required environment variables:
+- `OPENAI_API_KEY`: Your OpenAI API key
+- `ALERT_EMAIL`: Email address for sending alerts
+- `ALERT_EMAIL_PASS`: Email password
+- `ALERT_SMS_GATEWAY`: SMS gateway email address
 
 ## Usage
 
-Run the main script to generate a new thread:
+Run the thread generator:
 ```bash
-python -m today_in_sci_tech
+python -m today_in_sci_tech.thread_generator
 ```
 
-The script will:
-1. Fetch the latest AI papers from arXiv
-2. Generate summaries using GPT-4
-3. Create a formatted Twitter thread
-4. Save the thread to `data/threads/thread_YYYY-MM-DD_HH-MM.md`
-5. Send SMS alerts if any errors occur
+This will:
+1. Fetch the latest AI research papers
+2. Generate summaries
+3. Create a Twitter thread
+4. Save the thread to `data/threads/`
 
 ## Development
 
-### Running Tests
-```bash
-pytest
-```
-
 ### Code Style
-The project uses:
-- `black` for code formatting
-- `isort` for import sorting
-- `flake8` for linting
 
-Run all checks:
+The project uses:
+- Black for code formatting
+- isort for import sorting
+- flake8 for linting
+
+Run the formatters:
 ```bash
 black src tests
 isort src tests
 flake8 src tests
 ```
 
-### Adding New Features
-1. Create a new branch
-2. Add tests for your feature
-3. Implement the feature
-4. Run tests and style checks
-5. Submit a pull request
+### Testing
 
-## Data Directory
+The project uses pytest for testing. Run tests with:
+```bash
+PYTHONPATH=src pytest
+```
 
-The `data/threads` directory stores all generated thread files. Each file is named with a timestamp:
-- Format: `thread_YYYY-MM-DD_HH-MM.md`
-- Example: `thread_2024-05-23_10-28.md`
+Test structure:
+- Unit tests for each module
+- Integration tests for the full pipeline
+- Mocked external dependencies (OpenAI API, SMTP)
 
-The directory structure is maintained in git, but the generated files are ignored.
+### Data Directory
+
+The `data/threads/` directory stores generated Twitter threads:
+- Files are named with timestamp: `thread_YYYY-MM-DD_HH-MM.md`
+- Directory structure is preserved in git with `.gitkeep`
+- Generated files are ignored by git
 
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Run tests and style checks
+4. Run tests and formatters
 5. Submit a pull request
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+MIT License - see LICENSE file for details 
