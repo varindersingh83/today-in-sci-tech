@@ -3,8 +3,10 @@ Main module for generating Twitter threads from research papers.
 """
 
 import logging
+import os
 from datetime import datetime
 from typing import List, Dict
+from pathlib import Path
 
 from .fetcher import get_latest_arxiv_papers
 from .summarizer import summarize_paper
@@ -15,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 def save_thread_to_file(text: str) -> str:
     """
-    Save the generated thread to a markdown file.
+    Save the generated thread to a markdown file in the data/threads directory.
     
     Args:
         text: The thread text to save
@@ -23,12 +25,17 @@ def save_thread_to_file(text: str) -> str:
     Returns:
         Path to the saved file
     """
+    # Create data/threads directory if it doesn't exist
+    output_dir = Path("data/threads")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    
     now = datetime.now().strftime("%Y-%m-%d_%H-%M")
-    filename = f"thread_{now}.md"
+    filename = output_dir / f"thread_{now}.md"
+    
     with open(filename, "w") as f:
         f.write(text)
     logger.info(f"✅ Saved to {filename}")
-    return filename
+    return str(filename)
 
 def create_twitter_thread() -> str:
     """

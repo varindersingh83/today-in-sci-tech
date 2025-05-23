@@ -34,7 +34,10 @@ ENV/
 *.swo
 
 # Project specific
-thread_*.md
+data/threads/*.md
 .pytest_cache/
 .coverage
-htmlcov/ 
+htmlcov/
+
+# Keep data directory structure
+!data/threads/.gitkeep 
